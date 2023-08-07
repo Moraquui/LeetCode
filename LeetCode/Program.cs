@@ -1,81 +1,35 @@
-﻿public class TreeNode
-{
-    public int val;
-    public TreeNode left;
-    public TreeNode right;
-    public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
-    {
-        this.val = val;
-        this.left = left;
-        this.right = right;
-    }
-}
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     public int val;
- *     public TreeNode left;
- *     public TreeNode right;
- *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
+﻿
+//Search a 2D Matrix
 
 public class Solution
 {
-
-    public static TreeNode BuildTreeFromArray(int[] array, int fantomI = 0)
+    public bool SearchMatrix(int[][] matrix, int target)
     {
-        TreeNode root = new TreeNode(array[fantomI]);
-        root.left = BuildTreeFromArray(array, ++fantomI);
-        root.right = BuildTreeFromArray(array);
-
-        return root;
-    }
-    public IList<TreeNode> GenerateTrees(int n)
-    {
-        List<TreeNode> Tree = new List<TreeNode>();
-        int[] iList = new int[n - 1];
-        int[] List_ = new int[n];
-        for (int i = 1; i < n; i++)
-            iList[i - 1] = i;
-        for (int i = 1; i <= n; i++)
-            List_[i - 1] = i;
+        int start = 0;
+        int end = matrix[0].Length * matrix.Length - 1;
+        int middle = end / 2;
+        while (start <= end)
         {
-            TreeNode tNode = BuildTreeFromArray(List_);
-            if (!Tree.Contains(tNode))
+            Console.WriteLine('s');
+            middle = (end + start) / 2;
+            int first = middle / matrix[0].Length;
+            int second = middle % matrix[0].Length;
+            if (matrix[first][second] == target)
             {
-                Tree.Add(tNode);
+                return true;
             }
-
-
-        }
-        for (int i = 0; iList.Sum() != 0; i++)
-        {
-            if (iList[i] != 0)
+            else if (matrix[first][second] > target)
             {
-                (List_[i], List_[i + 1]) = (List_[i + 1], List_[i]);
-                {
-                    TreeNode tNode = BuildTreeFromArray(List_);
-                    if (!Tree.Contains(tNode))
-                    {
-                        Tree.Add(tNode);
-                    }
-                }
-                iList[i] -= 1;
-                for (int j = 1; j <= i; j++)
-                    iList[j - 1] = j;
-                i = -1;
+                end = middle - 1;
             }
             else
             {
-                continue;
+                start = middle + 1;
             }
         }
-        return Tree;
+
+
+        return false;
     }
 }
 
@@ -85,6 +39,12 @@ class TestClass
     {
 
         Solution s = new Solution();
-        s.GenerateTrees(3);
+        int[][] array3D = new int[][] { new int[] { 1, 2, 3 }, new int[] { 4, 4, 6 }, new int[] { 7, 8, 9 } };
+        for (int i = -1; i < 11; i++)
+        {
+            Console.Write(s.SearchMatrix(array3D, i));
+            Console.WriteLine(" - " + i);
+        }
+
     }
 }
