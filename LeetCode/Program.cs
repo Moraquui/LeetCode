@@ -1,35 +1,32 @@
 ﻿
-//Search a 2D Matrix
 
+//Check if There is a Valid Partition For The Array
+//You are given a 0-indexed integer array nums. 
+//You have to partition the array into one or more contiguous subarrays.
+
+//We call a partition of the array valid if each of the obtained subarrays satisfies
+//one of the following conditions:
+//The subarray consists of exactly 2 equal elements. For example, the subarray [2,2] is good.
+//The subarray consists of exactly 3 equal elements. For example, the subarray [4,4,4] is good.
+//The subarray consists of exactly 3 consecutive increasing elements, that is, the difference between adjacent elements is 1. For example, the subarray [3,4,5] is good, but the subarray [1,3,5] is not.
+//Return true if the array has at least one valid partition. Otherwise, return false.
 public class Solution
 {
-    public bool SearchMatrix(int[][] matrix, int target)
+    public bool ValidPartition(int[] nums)
     {
-        int start = 0;
-        int end = matrix[0].Length * matrix.Length - 1;
-        int middle = end / 2;
-        while (start <= end)
+        int n = nums.Length;
+        if (n == 1) return false;
+        bool[] dp = { true, false, n > 1 ? nums[0] == nums[1] : false };
+        for (int i = 2; i < n; i++)
         {
-            Console.WriteLine('s');
-            middle = (end + start) / 2;
-            int first = middle / matrix[0].Length;
-            int second = middle % matrix[0].Length;
-            if (matrix[first][second] == target)
-            {
-                return true;
-            }
-            else if (matrix[first][second] > target)
-            {
-                end = middle - 1;
-            }
-            else
-            {
-                start = middle + 1;
-            }
+            bool current_dp = (nums[i] == nums[i - 1] && dp[1]) ||
+                              (nums[i] == nums[i - 1] && nums[i] == nums[i - 2] && dp[0]) ||
+                              (nums[i] - nums[i - 1] == 1 && nums[i - 1] - nums[i - 2] == 1 && dp[0]);
+            dp[0] = dp[1];
+            dp[1] = dp[2];
+            dp[2] = current_dp;
         }
-
-
-        return false;
+        return dp[2];
     }
 }
 
@@ -37,14 +34,10 @@ class TestClass
 {
     static void Main(string[] args)
     {
-
         Solution s = new Solution();
-        int[][] array3D = new int[][] { new int[] { 1, 2, 3 }, new int[] { 4, 4, 6 }, new int[] { 7, 8, 9 } };
-        for (int i = -1; i < 11; i++)
-        {
-            Console.Write(s.SearchMatrix(array3D, i));
-            Console.WriteLine(" - " + i);
-        }
+        int[] array3D = new int[] {1,1,1,1,2,3};
+        Console.Write(s.ValidPartition(array3D));
+
 
     }
 }
